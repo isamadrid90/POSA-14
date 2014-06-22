@@ -1,3 +1,4 @@
+package edu.vuum.mocca;
 /**
  * @class Palantir
  *

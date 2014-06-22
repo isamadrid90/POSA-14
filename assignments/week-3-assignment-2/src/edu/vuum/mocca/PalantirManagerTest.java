@@ -1,6 +1,10 @@
+package edu.vuum.mocca;
+
 import java.util.List;
 import java.util.ListIterator;
 import java.util.ArrayList;
+import edu.vuum.mocca.SimpleSemaphore;
+
 
 /**
  * @class PalantirManagerTest
@@ -16,8 +20,7 @@ import java.util.ArrayList;
 class PalantirManagerTest 
 {
     /**
-     * Total number of times each Palantir user gets to gaze into a
-     * Palantir.
+     * Total number of times each Palantir user gets to gaze into a Palantir.
      */
     final static int mMaxPalantirSessions = 5;
 

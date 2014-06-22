@@ -1,3 +1,5 @@
+package edu.vuum.mocca;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.Condition;
@@ -18,6 +20,8 @@ public class SimpleSemaphore {
                             boolean fair)
     { 
         // TODO - you fill in here
+    	resources=permits;
+    	rl=new ReentrantLock(fair);
     }
 
     /**
@@ -26,6 +30,9 @@ public class SimpleSemaphore {
      */
     public void acquire() throws InterruptedException {
         // TODO - you fill in here
+    	rl.lockInterruptibly();
+    	resources--;
+    	
     }
 
     /**
@@ -34,6 +41,8 @@ public class SimpleSemaphore {
      */
     public void acquireUninterruptibly() {
         // TODO - you fill in here
+    	rl.lock();
+    	resources--;
     }
 
     /**
@@ -41,22 +50,27 @@ public class SimpleSemaphore {
      */
     void release() {
         // TODO - you fill in here
+    	rl.unlock();
+    	resources++;
     }
 
     /**
      * Define a ReentrantLock to protect the critical section.
      */
     // TODO - you fill in here
+    private ReentrantLock rl;
 
     /**
      * Define a ConditionObject to wait while the number of
      * permits is 0.
      */
     // TODO - you fill in here
+    private Condition notFull  = rl.newCondition(); 
 
     /**
      * Define a count of the number of available permits.
      */
     // TODO - you fill in here
+    private int resources=0;
 }
 
