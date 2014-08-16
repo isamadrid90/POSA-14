@@ -3,6 +3,7 @@ package edu.vuum.mocca;
 import android.content.ComponentName;
 import android.content.ServiceConnection;
 import android.net.Uri;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
@@ -76,7 +77,7 @@ public class DownloadActivity extends DownloadBase {
                 // service parameter into an interface that can be
                 // used to make RPC calls to the Service.
 
-                mDownloadCall = null;
+                mDownloadCall = DownloadCall.Stub.asInterface(service);
             }
 
             /**
@@ -109,7 +110,7 @@ public class DownloadActivity extends DownloadBase {
                 // service parameter into an interface that can be
                 // used to make RPC calls to the Service.
 
-                mDownloadRequest = null;
+                mDownloadRequest = DownloadRequest.Stub.asInterface(service);
             }
 
             /**
@@ -144,8 +145,19 @@ public class DownloadActivity extends DownloadBase {
                 // image whose pathname is passed as a parameter to
                 // sendPath().  Please use displayBitmap() defined in
                 // DownloadBase.
+            	
 
-                Runnable displayRunnable = null;
+                Runnable displayRunnable = new Runnable(){
+
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						displayBitmap(imagePathname);
+						
+					}
+                	
+                };
+                runOnUiThread(displayRunnable);
             }
         };
      
@@ -162,12 +174,26 @@ public class DownloadActivity extends DownloadBase {
         case R.id.bound_sync_button:
             // TODO - You fill in here to use mDownloadCall to
             // download the image & then display it.
+        	try {
+				String image=mDownloadCall.downloadImage(uri);
+				if(image!=null)
+					displayBitmap(image);
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             break;
 
         case R.id.bound_async_button:
             // TODO - You fill in here to call downloadImage() on
             // mDownloadRequest, passing in the appropriate Uri and
             // callback.
+        	try {
+				mDownloadRequest.downloadImage(uri, mDownloadCallback);
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             break;
         }
     }
